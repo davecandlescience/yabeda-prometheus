@@ -44,15 +44,10 @@ module Yabeda
         end
 
         def rack_handler
-          if Gem.loaded_specs['rack']&.version&.>= Gem::Version.new('3.0')
-            require 'rackup'
-            ::Rackup::Handler::WEBrick
-          else
-            ::Rack::Handler::WEBrick
-          end
+          require "rackup"
+          Rackup::Handler.default
         rescue LoadError
-          warn 'Please add gems rackup and webrick to your Gemfile to expose Yabeda metrics from prometheus-mmap'
-          ::Rack::Handler::WEBrick
+          warn 'Please add rackup to your Gemfile to expose Yabeda metrics from prometheus-mmap'
         end
       end
 
